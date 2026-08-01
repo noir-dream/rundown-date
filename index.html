@@ -3,90 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rundown_Hari_Ini.exe</title>
+    <title>Hari Ini Kita Berdua (Gemes Edition)</title>
     <style>
         body {
-            background-color: #1e1e1e;
-            color: #00ff00;
-            font-family: 'Courier New', Courier, monospace;
-            padding: 20px;
+            background: linear-gradient(135deg, #ffe0f0 0%, #e0f7fa 100%); 
+            color: #333;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            min-height: 90vh;
+            align-items: center;
+            min-height: 100vh;
             margin: 0;
+            overflow-x: hidden; 
+            position: relative;
         }
+        
+        /* === FOTO MELAYANG DI BACKGROUND (STYLE AESTHETIC) === */
+        .floating-photo {
+            position: absolute;
+            border-radius: 12px; /* Dibuat agak kotak melengkung, nggak bulet lagi */
+            object-fit: cover;
+            border: 6px solid white; /* Frame tebal ala photocard/polaroid */
+            box-shadow: 0 10px 20px rgba(255, 128, 171, 0.2);
+            z-index: 1; 
+            opacity: 0; 
+            display: none; 
+            animation: fadeInFloat 1.5s ease-out forwards, bobbing 4s ease-in-out infinite alternate;
+        }
+
+        /* Posisi dan ukuran dibikin acak biar natural */
+        #photo1 { top: 10%; left: 5%; width: 90px; height: 110px; animation-delay: 0.2s; }
+        #photo2 { bottom: 15%; right: 8%; width: 100px; height: 100px; animation-delay: 0.6s; }
+        #photo3 { top: 40%; left: 3%; width: 110px; height: 80px; animation-delay: 1.0s; }
+        #photo4 { top: 12%; right: 5%; width: 95px; height: 120px; animation-delay: 1.4s; }
+        #photo5 { bottom: 18%; left: 12%; width: 85px; height: 95px; animation-delay: 1.8s; }
+
+        @media (max-width: 600px) {
+            .floating-photo {
+                opacity: 0.4 !important; /* Dibuat agak transparan di HP biar teks tetep kebaca */
+            }
+        }
+
+        @keyframes fadeInFloat {
+            0% { opacity: 0; transform: translateY(30px) scale(0.8); }
+            100% { opacity: 0.8; transform: translateY(0) scale(1); }
+        }
+        
+        @keyframes bobbing {
+            0% { transform: translateY(0px) rotate(-3deg); }
+            100% { transform: translateY(-15px) rotate(4deg); }
+        }
+
+        /* === KOTAK UTAMA === */
         .container {
-            border: 1px solid #00ff00;
-            padding: 20px;
-            border-radius: 5px;
-            max-width: 400px;
-            width: 100%;
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
-        }
-        h2 {
-            font-size: 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            background-color: rgba(255, 255, 255, 0.9); 
+            padding: 35px 30px;
+            border-radius: 25px;
+            max-width: 420px;
+            width: 85%;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08); 
             text-align: center;
-            margin-bottom: 20px;
-            border-bottom: 1px dashed #00ff00;
-            padding-bottom: 10px;
+            position: relative;
+            z-index: 10; 
+            backdrop-filter: blur(8px); 
         }
+        
+        h2 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #ff80ab; 
+            border-bottom: 2px solid rgba(255, 128, 171, 0.2);
+            padding-bottom: 15px;
+        }
+        
+        #booting-text {
+            color: #78909c; 
+            margin-bottom: 25px;
+            font-size: 1rem;
+            min-height: 1.2em;
+            line-height: 1.6;
+        }
+        
         .btn {
-            background-color: #00ff00;
-            color: #1e1e1e;
+            background-color: #ff80ab; 
+            color: #ffffff;
             border: none;
-            padding: 15px;
-            width: 100%;
+            padding: 15px 30px;
             font-size: 16px;
             font-family: inherit;
-            font-weight: bold;
+            font-weight: 700;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 15px; 
             transition: 0.3s;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(255, 128, 171, 0.3);
+        }
+        .btn:hover {
+            background-color: #ff5c93; 
+            box-shadow: 0 6px 15px rgba(255, 128, 171, 0.5);
+            transform: translateY(-2px);
         }
         .btn:active {
-            transform: scale(0.98);
+            transform: scale(0.96); 
         }
-        #rundown-content {
+        
+        #rundown-list {
             display: none;
-            margin-top: 20px;
+            margin-top: 30px;
+            text-align: left;
         }
+        
         .step {
-            margin: 15px 0;
+            margin: 20px 0;
             opacity: 0;
-            animation: fadeIn 0.5s forwards;
+            animation: fadeInStep 0.6s forwards;
+            display: flex;
+            align-items: flex-start; 
+            line-height: 1.6;
         }
+        
         .time {
-            color: #ff9d00;
-            font-weight: bold;
+            color: #ff80ab; 
+            font-weight: 800;
+            min-width: 65px;
+            margin-right: 15px;
+            font-size: 1.1rem;
         }
-        @keyframes fadeIn {
-            to { opacity: 1; }
+        
+        .description {
+            color: #555; 
+            font-weight: 500;
+        }
+        
+        @keyframes fadeInStep {
+            to { opacity: 1; transform: translateX(0); }
+            from { opacity: 0; transform: translateX(-15px); }
+        }
+        
+        #cute-car {
+            font-size: 1.5rem;
+            color: #ff80ab;
+            margin-top: 30px;
+            display: none;
+            text-align: center;
+            animation: driveIn 2s ease-out forwards;
+        }
+        
+        @keyframes driveIn {
+            0% { transform: translateX(-50px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Kumpulan Foto Gemes (Awan, Kucing, Bunga, Dessert, Langit) -->
+    <img src="https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?w=200&q=80" id="photo1" class="floating-photo" alt="Awan Pastel">
+    <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=200&q=80" id="photo2" class="floating-photo" alt="Kucing Gemes">
+    <img src="https://images.unsplash.com/photo-1522748906645-95d8eb85fa31?w=200&q=80" id="photo3" class="floating-photo" alt="Bunga Pink">
+    <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?w=200&q=80" id="photo4" class="floating-photo" alt="Dessert Cute">
+    <img src="https://images.unsplash.com/photo-1534081333815-ae5019106622?w=200&q=80" id="photo5" class="floating-photo" alt="Langit Aesthetic">
+
     <div class="container">
-        <h2>[ SYSTEM: READY ]</h2>
-        <button class="btn" id="runBtn" onclick="executeRundown()">▶ Execute Rundown.exe</button>
+        <h2>[ JADWAL SERU KITA 💖 ]</h2>
+        <div id="booting-text"></div>
+        <button class="btn" id="runBtn" onclick="initiateMission()">▶ LIHAT RENCANA GEMES KITA</button>
         
-        <div id="rundown-content">
-            <div class="step" style="animation-delay: 0.2s">> <span class="time">15:30</span> : Tunggu di depan ya, aku jemput 🚗</div>
-            <div class="step" style="animation-delay: 0.8s">> <span class="time">16:30</span> : Tiba di TSM Cibubur (Misi pertama: Beli Popcorn🍿)</div>
-            <div class="step" style="animation-delay: 1.4s">> <span class="time">17:35</span> : Masuk Studio Bioskop 🎬</div>
-            <div class="step" style="animation-delay: 2.0s">> <span class="time">20:00</span> : Pindah ke Nikudon Tokyo Street BBQ (GOR POPKI). Waktunya nge-grill! 🥩</div>
-            <div class="step" style="animation-delay: 2.6s">> <span class="time">21:30</span> : Perjalanan pulang (Target: Sampai rumah dengan aman) 🏠</div>
-            <br>
-            <div class="step" style="animation-delay: 3.2s; color: #fff;">Status: Compiled successfully. See you! ✨</div>
+        <div id="rundown-list">
+            <div class="step" style="animation-delay: 0.3s">
+                <span class="time">15:30</span>
+                <span class="description">Penjemputan Tuan Putri. 👑 <br>(Misi: Otw ke rumah kamu!)</span>
+            </div>
+            <div class="step" style="animation-delay: 1.0s">
+                <span class="time">16:30</span>
+                <span class="description">Tiba di TSM Cibubur.<br>(Misi Utama: Beli Popcorn Supply! 🍿)</span>
+            </div>
+            <div class="step" style="animation-delay: 1.7s">
+                <span class="time">17:35</span>
+                <span class="description">Movie Time.<br>(Warning: Siap-siap baper...) 🎬</span>
+            </div>
+            <div class="step" style="animation-delay: 2.4s">
+                <span class="time">20:00</span>
+                <span class="description">Nikudon Tokyo Street BBQ.<br>(Waktunya ngobrol santai sambil masak daging 🥩🔥)</span>
+            </div>
+            <div class="step" style="animation-delay: 3.1s">
+                <span class="time">21:30</span>
+                <span class="description">Perjalanan pulang.<br>(Misi Aman: Nganterin kamu balik dengan selamat 😊) 🏠</span>
+            </div>
+            
+            <div id="cute-car">🚗💨💕</div>
         </div>
     </div>
 
     <script>
-        function executeRundown() {
+        const bootingPhrases = [
+            "Membuat rencana istimewa...",
+            "Memilih rute tercepat...",
+            "Menyiapkan mood gemes...",
+            "Hampir siap...",
+            "[SYSTEM: SEMUA SIAP 💖]"
+        ];
+        let phraseIndex = 0;
+        const bootingTextDiv = document.getElementById('booting-text');
+
+        function typeBootingText() {
+            if (phraseIndex < bootingPhrases.length) {
+                bootingTextDiv.innerHTML += bootingPhrases[phraseIndex] + "<br>";
+                phraseIndex++;
+                setTimeout(typeBootingText, 500);
+            } else {
+                document.getElementById('runBtn').style.display = 'inline-block';
+            }
+        }
+
+        document.getElementById('runBtn').style.display = 'none';
+        typeBootingText();
+
+        function initiateMission() {
             document.getElementById('runBtn').style.display = 'none';
-            document.getElementById('rundown-content').style.display = 'block';
+            document.getElementById('booting-text').style.display = 'none';
+            document.getElementById('rundown-list').style.display = 'block';
+            
+            // Munculin foto-foto melayang pas tombol dipencet
+            const photos = document.querySelectorAll('.floating-photo');
+            photos.forEach(photo => {
+                photo.style.display = 'block';
+            });
+
+            setTimeout(() => {
+                document.getElementById('cute-car').style.display = 'block';
+            }, 3500); 
         }
     </script>
 </body>
